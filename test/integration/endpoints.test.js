@@ -79,8 +79,12 @@ describe('Verify endpoints', () => {
           }
         }
       };
-      const number = '44'
-      const time = '2019-04-03T12:34:56.00Z'
+      // const number = '44'
+      const number = '9328654';
+
+      // const time = '2019-04-03T12:34:56.00Z'
+      const time = '2019-07-01';
+
       const res = await fastify.inject({
         method: 'GET',
         url: `/switch/price?number=${number}&time=${time}`,

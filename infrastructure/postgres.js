@@ -28,6 +28,13 @@ async function getItemByPrefixAndDateFromPostgres(prefix, date) {
 
     try {
         res = await client.query(query);
+        const { rowCount } = res;
+
+        if (!rowCount) {
+            client.end();
+            return null;
+        }
+
         const { prefix, price, initial, increment, start_date } = res.rows[0];
 
         const cc = new CallingCode(prefix, price, initial, increment, start_date);
