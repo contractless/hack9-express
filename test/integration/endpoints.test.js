@@ -2,10 +2,20 @@ const chai = require('chai');
 const expect = require('chai').expect;
 chai.use(require('chai-json-schema'));
 
-const { fastify } = require('../../server')
+const {
+  fastify
+} = require('../../server')
 
 
 describe('Verify endpoints', () => {
+
+  before(async () => {
+    await (new Promise(resolve => setTimeout(resolve, 1000)))
+  })
+
+  after(() => {
+    fastify.close()
+  });
 
   const schema40X = {
     title: 'priceSchema400',
@@ -21,7 +31,7 @@ describe('Verify endpoints', () => {
   const acceptedCallSchema = {
     title: 'acceptedCallSchema',
     type: 'object',
-    required: ['calling', 'called', 'start','duration', 'rounded', 'price', 'cost'],
+    required: ['calling', 'called', 'start', 'duration', 'rounded', 'price', 'cost'],
     properties: {
       calling: {
         type: 'string',
@@ -46,39 +56,77 @@ describe('Verify endpoints', () => {
       }
     }
   };
-  before(async () => {
-    await (new Promise(resolve => setTimeout(resolve, 1000)))
-  })
 
-  after(() => {
-    fastify.close()
-  })
 
-  describe('/switch/price', () => {
+  const priceSchema = {
+    title: 'priceSchema',
+    type: 'object',
+    required: ['prefix', 'price', 'from', 'initial', 'increment'],
+    properties: {
+      prefix: {
+        type: 'string',
+      },
+      price: {
+        type: 'number'
+      },
+      from: {
+        type: 'string',
+      },
+      initial: {
+        type: 'number',
+      },
+      increment: {
+        type: 'number',
+      }
+    }
+  };
+
+
+
+  const listingSchema = {
+    title: 'listingSchema',
+    type: 'object',
+    required: ['calling', 'calls'],
+    properties: {
+      calling: {
+        type: 'string',
+      },
+      calls: {
+        type: 'array',
+        items: [{
+          type: 'object',
+          properties: {
+            calling: {
+              type: 'number'
+            },
+            called: {
+              type: 'string'
+            },
+            start: {
+              type: 'string'
+            },
+            duration: {
+              type: 'integer'
+            },
+            rounded: {
+              type: 'integer'
+            },
+            price: {
+              type: 'number'
+            },
+            cost: {
+              type: 'number'
+            }
+          }
+        }]
+      }
+    }
+  }
+
+
+  describe('GET /switch/price', () => {
 
     it('Returns a potential call price for the given number', async () => {
-      const priceSchema = {
-        title: 'priceSchema',
-        type: 'object',
-        required: ['prefix', 'price', 'from','initial', 'increment'],
-        properties: {
-          prefix: {
-            type: 'string',
-          },
-          price: {
-            type: 'number'
-          },
-          from: {
-            type: 'string',
-          },
-          initial: {
-            type: 'number',
-          },
-          increment: {
-            type: 'number', 
-          }
-        }
-      };
       // const number = '44'
       const number = '9328654';
 
@@ -125,7 +173,7 @@ describe('Verify endpoints', () => {
 
   //TODO validate response output
   describe('/switch/call', () => {
-  
+
     const calling = "381211234567";
     const called = "38164111222333";
     const start = "2019-05-23T21:03:33.30Z";
@@ -136,7 +184,7 @@ describe('Verify endpoints', () => {
       const res = await fastify.inject({
         method: 'POST',
         url: `/switch/call`,
-        payload:{
+        payload: {
           "calling": `${calling}`,
           "called": `${called}`,
           "start": `${start}`,
@@ -152,7 +200,7 @@ describe('Verify endpoints', () => {
       const res = await fastify.inject({
         method: 'POST',
         url: `/switch/call`,
-        payload:{
+        payload: {
           "calling": `${calling}`,
           "called": `${called}`,
           "start": `${start}`,
@@ -166,5 +214,38 @@ describe('Verify endpoints', () => {
 
   });
 
-})
 
+
+
+  describe('GET /listing/{calling}', () => {
+
+    it('Returns all calls that a certain number made', async () => {
+      const calling = '38121123456';
+      const from = '2019-01-01T00:00:00.00Z';
+      const to = '2019-05-31T23:59:59.99Z';
+      const mockSchema = {
+        "calling": "381211234567",
+        "calls": [{
+          "calling": 381211234567,
+          "called": "38164111222333",
+          "start": "2019-05-23T21:03:33.30Z",
+          "duration": 350,
+          "rounded": 355,
+          "price": 0.4,
+          "cost": 2.367
+        }]
+      };
+
+      /*   const res = await fastify.inject({
+          method: 'GET',
+          url: `/listing/${calling}?from=${from}&to=${to}`,
+        });
+        const body = JSON.parse(res.payload);
+        console.log('-------------------');
+        console.log(body);
+        expect(res.statusCode).to.equal(200); */
+      expect(mockSchema).to.be.jsonSchema(listingSchema); //replace mockSchema with body
+    });
+  });
+
+})
