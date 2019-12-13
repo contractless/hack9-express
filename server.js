@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const {calculateCallCost, calculateDuration} = require('./functions/callCostCalculator');
+const {isNumberValid, calculateCallCost, calculateDuration} = require('./functions/callCostCalculator');
 const {getItemByPrefixAndDate, resetDbEntries} = require('./services/callService');
 require('dotenv').config();
 

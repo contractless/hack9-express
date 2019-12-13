@@ -1,9 +1,12 @@
 const { Client } = require('pg');
+require('dotenv').config();
 
-const connectionString = 'postgresql://postgres:yoursecurepassword@localhost:5432/postgres'
+
+const connectionString = process.env.CONN_STR;
 
 async function getItemByPrefixAndDateFromPostgres(prefix, date) {
     // const client = await createClient();
+    console.log(connectionString);
     const client = new Client({
         connectionString: connectionString
     });
