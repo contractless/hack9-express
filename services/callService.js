@@ -1,4 +1,3 @@
-// const {getItemByPrefixAndDateFromCsv} = require('../infrastructure/db');
 const { getItemByPrefixAndDateFromPostgres } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {

@@ -5,42 +5,28 @@ require('dotenv').config();
 const connectionString = process.env.CONN_STR;
 
 async function getItemByPrefixAndDateFromPostgres(prefix, date) {
-    // const client = await createClient();
-    console.log(connectionString);
-    const client = new Client({
-        connectionString: connectionString
-    });
-    await client.connect();
+    const client = await createClient();
 
     const query = `
-    select similarity(prefix, '${prefix}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
-    from public.calling_codes
-    where start_date <= '${date}'
-    order by sim desc, pl desc
-    limit 1
-    `;
-    console.log(query);
-
-    
-
-
-    let res;
+        select similarity(prefix, '${prefix}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
+        from public.calling_codes
+        where start_date <= '${date}'
+        order by sim desc, pl desc
+        limit 1`;
 
     try {
-        res = await client.query(query);
-        const { rowCount } = res;
+        const queryResult = await client.query(query);
 
-        if (!rowCount) {
+        if (!resultHasData(queryResult)) {
             client.end();
             return null;
         }
+        
+        const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
-        const { prefix, price, initial, increment, start_date } = res.rows[0];
-
-        const cc = new CallingCode(prefix, price, initial, increment, start_date);
-        console.log(cc);
         client.end();
-        return cc;
+
+        return new CallingCode(prefix, price, initial, increment, start_date);
     } catch (error) {
         console.log(error);
         client.end();
@@ -49,22 +35,24 @@ async function getItemByPrefixAndDateFromPostgres(prefix, date) {
     
 }
 
+const resultHasData = queryResult => !!queryResult.rowCount;
+
 async function createClient() {
     const client = new Client({
         connectionString: connectionString
     });
-    return await client.connect();
+
+    await client.connect();
+
+    return client;
 }
 
-
-class CallingCode {
-    constructor(prefix, price, initial, increment, start_date) {
-        this.prefix = prefix;
-        this.price = price;
-        this.initial = initial;
-        this.increment = increment;
-        this.start_date = start_date;
-    }
+function CallingCode(prefix, price, initial, increment, start_date){
+    this.prefix = prefix;
+    this.price = price;
+    this.initial = initial;
+    this.increment = increment;
+    this.start_date = start_date;
 }
 
 
