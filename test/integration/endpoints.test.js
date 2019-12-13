@@ -17,7 +17,7 @@ describe('Verify calculation functions', () => {
   describe('/switch/price', () => {
 
     it('Returns a potential call price for the given number', async () => {
-      var priceSchema = {
+      let priceSchema = {
         title: 'priceSchema',
         type: 'object',
         required: ['prefix', 'price', 'from','initial', 'increment'],
@@ -32,10 +32,10 @@ describe('Verify calculation functions', () => {
             type: 'string',
           },
           initial: {
-            type: 'string', //TODO should be number
+            type: 'number',
           },
           increment: {
-            type: 'string', //TODO should be number
+            type: 'number', 
           }
         }
       };
@@ -74,10 +74,54 @@ describe('Verify calculation functions', () => {
 
   });
 
-  //TODO
-  xdescribe('/switch/call', () => {
+  describe('/switch/call', () => {
+    let acceptedCallSchema = {
+      title: 'acceptedCallSchema',
+      type: 'object',
+      required: ['calling', 'called', 'start','duration', 'rounded', 'price', 'cost'],
+      properties: {
+        calling: {
+          type: 'string',
+        },
+        called: {
+          type: 'string'
+        },
+        start: {
+          type: 'string',
+        },
+        duration: {
+          type: 'integer',
+        },
+        rounded: {
+          type: 'integer',
+        },
+        price: {
+          type: 'number',
+        },
+        cost: {
+          type: 'number',
+        }
+      }
+    };
+
+    const calling = "381211234567";
+    const called = "38164111222333";
+    const start = "2019-05-23T21:03:33.30Z";
+    const duration = "450";
     it('Returns call cost', async () => {
-    
+      const res = await fastify.inject({
+        method: 'POST',
+        url: `/switch/call`,
+        payload:{
+          "calling": `${calling}`,
+          "called": `${called}`,
+          "start": `${start}`,
+          "duration": `${duration}`
+        },
+      });
+      const body = JSON.parse(res.payload);
+      console.log(body);
+      expect(body).to.be.jsonSchema(acceptedCallSchema);
     })
 
   });
