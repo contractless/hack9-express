@@ -1,5 +1,5 @@
 const prod = false;
-import { calculateCallCost,calculateDuration } from './functions/callCostCalculator'
+const {calculateCallCost,calculateDuration} = require('./functions/callCostCalculator');
 
 const fastify = require('fastify')({ logger: !prod})
 
