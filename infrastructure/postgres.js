@@ -16,20 +16,17 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
 
     try {
         const queryResult = await client.query(query);
+        client.end();
 
         if (!resultHasData(queryResult)) {
-            client.end();
             return null;
         }
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
         if(prefixArg.indexOf(prefix) == -1){
-            client.end();
             return null;
         }
-
-        client.end();
 
         return new CallingCode(prefix, price, initial, increment, start_date);
     } catch (error) {
