@@ -11,6 +11,6 @@ notifications:
       - d.veljovic@levi9.com
       - nebojsa.loznjakovic@gmail.com
       - m.dodovic@levi9.com
-      - g.gardic@levi9.com
+      - n.jeremic@levi9.com
     on_success: always
     on_failure: always
