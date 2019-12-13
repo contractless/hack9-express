@@ -3,7 +3,7 @@ const {calculateCallCost, calculateDuration, isNumberValid} = require('./functio
 const {getItemByPrefixAndDate, resetDbEntries} = require('./services/callService');
 require('dotenv').config();
 
-const fastify = require('fastify')({ logger: process.env.NODE_ENV !== "production"});
+const fastify = require('fastify')({ logger: false});
 
 fastify.post('/reset', async (req, res) => {
   try{
@@ -28,10 +28,10 @@ fastify.get('/switch/price', async (req, res) => {
 
   return res.status(200).send({
       prefix: dbData.prefix,
-      price: pricePerMinute,
+      price: parseFloat(pricePerMinute),
       from: dbData.start_date,
-      initial: dbData.initial,
-      increment: dbData.increment
+      initial: parseInt(dbData.initial, 10),
+      increment: parseInt(dbData.increment, 10)
     })
 })
 
