@@ -1,7 +1,8 @@
-const {getItemByPrefixAndDateFromCsv} = require('../infrastructure/db')
+// const {getItemByPrefixAndDateFromCsv} = require('../infrastructure/db');
+const { getItemByPrefixAndDateFromPostgres } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
-    return await getItemByPrefixAndDateFromCsv(prefix, date);
+    return await getItemByPrefixAndDateFromPostgres(prefix, date);
 }
 
 const resetDbEntries = async () => {

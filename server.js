@@ -1,9 +1,9 @@
 const Joi = require('@hapi/joi');
-const {calculateCallCost, calculateDuration, isNumberValid} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate, resetDbEntries} = require('./services/callService')
-const prod = false;
+const {calculateCallCost, calculateDuration} = require('./functions/callCostCalculator');
+const {getItemByPrefixAndDate, resetDbEntries} = require('./services/callService');
+require('dotenv').config();
 
-const fastify = require('fastify')({ logger: !prod})
+const fastify = require('fastify')({ logger: process.env.NODE_ENV !== "production"});
 
 fastify.post('/reset', async (req, res) => {
   try{
@@ -69,13 +69,14 @@ fastify.post('/switch/call', async (req, res) => {
 
 const start = async () => {
   try {
-    await fastify.listen(3000)
+    await fastify.listen(process.env.PORT)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
   }
 }
-start()
+
+start();
 
 module.exports = {
   fastify,
