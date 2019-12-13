@@ -9,19 +9,19 @@ fs.createReadStream('../callingCodes.csv')
   .on('data', row => records.push(row))
   .on('end', () => console.log('[SUCCESS] CSV Parsing done!'))
 
-function getItemByPrefix(prefix) {
+function getItemByPrefixFromCsv(prefix) {
   return records.find(r => {
     const dummyPrefix = prefix.slice(0, 3)
     return r.prefix.startsWith(dummyPrefix)
   })
 }
 
-function getItemByPrefixAndDate(prefix, date) {
-  return getItemByPrefix(prefix);
+function getItemByPrefixAndDateFromCsv(prefix, date) {
+  return getItemByPrefixFromCsv(prefix);
 }
 
 module.exports = {
-  getItemByPrefix,
-  getItemByPrefixAndDate
+  getItemByPrefixFromCsv,
+  getItemByPrefixAndDateFromCsv
 }
 

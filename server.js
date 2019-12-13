@@ -1,5 +1,5 @@
 const {calculateCallCost} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate} = require('./infrastructure/db')
+const {getItemByPrefixAndDate} = require('./services/callService')
 const prod = false;
 
 const fastify = require('fastify')({ logger: !prod})
@@ -12,7 +12,7 @@ fastify.post('/reset', async (req, res) => {
 fastify.get('/switch/price', async (req, res) => {
   const {number, time} = req.query;
 
-  const dbData = await getItemByPrefixAndDate(number);
+  const dbData = await getItemByPrefixAndDate(number, time);
 
   const pricePerMinute = calculateCallCost(60, dbData.price);
 
