@@ -1,5 +1,5 @@
+const {calculateCallCost} = require('./functions/callCostCalculator');
 const prod = false;
-const {calculateCallCost,calculateDuration} = require('./functions/callCostCalculator');
 
 const fastify = require('fastify')({ logger: !prod})
 
@@ -7,8 +7,10 @@ fastify.post('/reset', async (req, res) => {
   return {reset: true}
 })
 
+// Get (potential) call price for the given called number, per minute. This will not initiate a call.
 fastify.get('/switch/price', async (req, res) => {
-  const reportedDuration = 123;
+  const {number, time} = req.query;
+
   const dbData = {
     prefix: '381 21',
     from: '2019-01-01T00:00:00.00Z',
@@ -17,17 +19,17 @@ fastify.get('/switch/price', async (req, res) => {
     pricePerMinute: 60
   }
 
-  const duration = calculateDuration(dbData.initial, reportedDuration, dbData.increment);
-  const price = calculateCallCost(duration, dbData.pricePerMinute);
+  const pricePerMinute = calculateCallCost(60, dbData.pricePerMinute);
 
-  return {body: {
-    'prefix': dbData.prefix,
-    price,
-    'from': dbData.from,
-    'initial': dbData.initial,
-    'increment': dbData.increment
-  }}
-
+  return {
+    body: {
+      prefix: dbData.prefix,
+      price: pricePerMinute,
+      from: dbData.from,
+      initial: dbData.initial,
+      increment: dbData.increment
+    }
+  }
 })
 
 const start = async () => {
