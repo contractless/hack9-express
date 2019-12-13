@@ -5,14 +5,21 @@ require('dotenv').config();
 const connectionString = process.env.CONN_STR;
 
 async function getItemByPrefixAndDateFromPostgres(prefix, date) {
-    const client = await createClient();
+    // const client = await createClient();
+    const client = new Client({
+        connectionString: connectionString
+    });
+    await client.connect();
 
     const query = `
-        select similarity(prefix, '${prefix}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
-        from public.calling_codes
-        where start_date <= '${date}'
-        order by sim desc, pl desc
-        limit 1`;
+    select similarity(prefix, '${prefix}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
+    from public.calling_codes
+    where start_date <= '${date}'
+    order by sim desc, pl desc
+    limit 1
+    `;
+
+    let res;
 
     try {
         const queryResult = await client.query(query);
@@ -23,7 +30,6 @@ async function getItemByPrefixAndDateFromPostgres(prefix, date) {
         }
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
-
         client.end();
 
         return new CallingCode(prefix, price, initial, increment, start_date);
