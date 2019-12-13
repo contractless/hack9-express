@@ -10,12 +10,18 @@ fs.createReadStream('../callingCodes.csv')
   .on('end', () => console.log('[SUCCESS] CSV Parsing done!'))
 
 function getItemByPrefix(prefix) {
-  return records.filter(r => {
-    return r.prefix.startsWith(prefix)
+  return records.find(r => {
+    const dummyPrefix = prefix.slice(0, 3)
+    return r.prefix.startsWith(dummyPrefix)
   })
+}
+
+function getItemByPrefixAndDate(prefix, date) {
+  return getItemByPrefix(prefix);
 }
 
 module.exports = {
   getItemByPrefix,
+  getItemByPrefixAndDate
 }
 
