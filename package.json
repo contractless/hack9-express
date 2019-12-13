@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/contractless/hack9-express#readme",
   "dependencies": {
+    "@hapi/joi": "^16.1.8",
     "csv-parser": "^2.3.2",
     "fastify": "^2.11.0",
     "pg": "^7.14.0"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "nodemon": "^2.0.2",
     "chai": "^4.2.0",
+    "chai-json-schema": "^1.5.1",
     "mocha": "^6.2.2"
   }
 }
