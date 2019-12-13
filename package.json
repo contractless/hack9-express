@@ -1,0 +1,25 @@
+{
+  "name": "hack9-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contractless/hack9-express.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/contractless/hack9-express/issues"
+  },
+  "homepage": "https://github.com/contractless/hack9-express#readme",
+  "dependencies": {
+    "fastify": "^2.11.0",
+    "nodemon": "^2.0.2"
+  }
+}
