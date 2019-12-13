@@ -1,0 +1,94 @@
+{
+  "aggregate": {
+    "timestamp": "2019-12-13T16:03:15.388Z",
+    "scenariosCreated": 10,
+    "scenariosCompleted": 10,
+    "requestsCompleted": 10,
+    "latency": {
+      "min": 1.4,
+      "max": 19.5,
+      "median": 2.3,
+      "p95": 19.5,
+      "p99": 19.5
+    },
+    "rps": {
+      "count": 10,
+      "mean": 7.75
+    },
+    "scenarioDuration": {
+      "min": 3.3,
+      "max": 140.9,
+      "median": 4.9,
+      "p95": 140.9,
+      "p99": 140.9
+    },
+    "scenarioCounts": {
+      "POST financial/invoice": 10
+    },
+    "errors": {},
+    "codes": {
+      "404": 10
+    },
+    "matches": 0,
+    "customStats": {},
+    "counters": {},
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 1,
+        "arrivalRate": 10
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2019-12-13T16:03:15.386Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 10,
+      "requestsCompleted": 10,
+      "latency": {
+        "min": 1.4,
+        "max": 19.5,
+        "median": 2.3,
+        "p95": 19.5,
+        "p99": 19.5
+      },
+      "rps": {
+        "count": 10,
+        "mean": 7.75
+      },
+      "scenarioDuration": {
+        "min": 3.3,
+        "max": 140.9,
+        "median": 4.9,
+        "p95": 140.9,
+        "p99": 140.9
+      },
+      "scenarioCounts": {
+        "POST financial/invoice": 10
+      },
+      "errors": {},
+      "codes": {
+        "404": 10
+      },
+      "matches": 0,
+      "latencies": [
+        19511419,
+        8430027,
+        1419795,
+        4354946,
+        1491826,
+        1514958,
+        2529699,
+        2510780,
+        2010387,
+        1798672
+      ],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}

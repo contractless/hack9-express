@@ -1,0 +1,12 @@
+scenarios:
+  - name: "GET switch/price"
+    flow:
+    - get:
+        url: "/switch/price"
+        qs:
+          number
+          time
+        expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data

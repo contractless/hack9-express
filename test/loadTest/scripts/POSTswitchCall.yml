@@ -1,0 +1,18 @@
+scenarios:
+  - name: "POST switch/call"
+    flow:
+    - post:
+        url: "/switch/call"
+        json:
+          query: '
+            {
+              "calling": "381211234567",
+              "called": "38164111222333",
+              "start": "2019-05-23T21:03:33.30Z",
+              "duration": "450"
+            }
+          '
+        expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data
