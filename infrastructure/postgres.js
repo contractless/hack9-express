@@ -37,6 +37,24 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
     
 }
 
+async function storeCallRecordToPostgres(calling, called, start, duration, rounded, price, cost) {
+    const client = await createClient();
+    const query = `INSERT INTO public.call_history (calling, called, start, duration, rounded, price, cost) VALUES ('${calling}', '${called}', '${start}', '${duration}', '${rounded}', '${price}', '${cost}');`;
+
+    try{
+        const queryResult = await client.query(query);
+        if(queryResult.rowCount) {
+            client.end();
+            return true;
+        }
+    } catch(e) {
+        client.end();
+        console.log(e)
+    }
+    
+    return null;
+}
+
 const resultHasData = queryResult => !!queryResult.rowCount;
 
 async function createClient() {
@@ -57,7 +75,7 @@ function CallingCode(prefix, price, initial, increment, start_date){
     this.start_date = start_date;
 }
 
-
 module.exports = {
-    getItemByPrefixAndDateFromPostgres
+    getItemByPrefixAndDateFromPostgres,
+    storeCallRecordToPostgres
 }

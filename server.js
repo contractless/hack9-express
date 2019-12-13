@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const {calculateCallCost, calculateDuration, isNumberValid} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate, resetDbEntries} = require('./services/callService');
+const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord} = require('./services/callService');
 require('dotenv').config();
 
 const fastify = require('fastify')({ logger: false});
@@ -50,8 +50,10 @@ fastify.post('/switch/call', async (req, res) => {
   const {calling, called, start, duration} = req.body;
   try{
     const dbData = await getItemByPrefixAndDate(called, start);
+    if(!dbData) return res.code(404).send({message: 'Prefix not found!'})
     const roundedDuration = calculateDuration(dbData.initial, duration, dbData.increment)
     const callCost = calculateCallCost(roundedDuration, dbData.price)
+    await storeCallRecord(calling, called, start, duration, roundedDuration, dbData.price, callCost);
     return {
       calling,
       called,
@@ -62,6 +64,7 @@ fastify.post('/switch/call', async (req, res) => {
       cost: callCost
     }
   } catch(e) {
+    console.log(e)
     return res.status(500).send({message: 'Something bad happened!'})
   }
   
