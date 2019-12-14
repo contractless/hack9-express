@@ -121,7 +121,7 @@ fastify.get('/financial/invoice/:id', async (req, res) => {
 
 });
 
-fastify.get('/financial/reports/:calling', async (req, res) => {
+fastify.get('/financial/report/:calling', async (req, res) => {
   const { calling } = req.params;
 
   const reports = getReports(calling);
