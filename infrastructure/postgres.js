@@ -90,7 +90,8 @@ const getListingCallingFromPostgres = async (calling, from, to) => {
         const calls = [];
 
         queryResult.rows.forEach(({ calling, called, start, duration, rounded, price, cost }) => {
-            calls.push({ calling, called, start, duration, rounded, price, cost });
+            const start1 = start.toISOString().slice(0, -5)+"Z";
+            calls.push({ calling, called, start:start1, duration, rounded, price, cost });
         });
 
         return {
