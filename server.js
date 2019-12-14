@@ -24,7 +24,7 @@ fastify.get('/switch/price', async (req, res) => {
   time = time || new Date().toISOString();
 
 
-  if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
+  if(!isNumberValid(number) || time > Date.now()) return res.status(400).send({message: 'Call number is not in valid format!'})
 
   if(number == "54" || number == 54){
     console.log("NUMBER", number);
