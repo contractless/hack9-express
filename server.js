@@ -124,7 +124,7 @@ fastify.get('/financial/invoice/:id', async (req, res) => {
 fastify.get('/financial/report/:calling', async (req, res) => {
   const { calling } = req.params;
 
-  const reports = getReports(calling);
+  const reports = await getReports(calling);
 
   const remaining = +reports[0].full_costs - reports.map(report => report.sum).reduce((acc, cur) => +acc + cur);
 
