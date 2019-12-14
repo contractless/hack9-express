@@ -18,9 +18,13 @@ fastify.post('/reset', async (req, res) => {
 
 // Get (potential) call price for the given called number, per minute. This will not initiate a call.
 fastify.get('/switch/price', async (req, res) => {
-  const {number, time} = req.query;
+  const {number} = req.query;
+  let { time } = req.query;
 
-  if(!isNumberValid(number) || !time) return res.status(400).send({message: 'Call number is not in valid format!'})
+  time = time || new Date().toISOString();
+
+
+  if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
 
   if(number == "38111" || number == 38111){
     console.log("NUMBER", number);
