@@ -160,7 +160,7 @@ async function getInvoicesFromDb(start, end) {
         invoices.push({ id, calling, start: start_date, end: end_date, sum, count });
     });
 
-    return invoices;
+    return { invoices };
 }
 
 async function createClient() {

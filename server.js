@@ -116,9 +116,6 @@ fastify.get('/financial/invoice/:id', async (req, res) => {
   const { id } = req.params;
 
   const invoice = await getInvoiceById(id);
-
-  console.log('passed fastify1');
-
   
   return res.status(200).send(invoice);
 
