@@ -1,6 +1,7 @@
 const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, truncateTables } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
+    console.log("tu sam 2")
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
 }
 

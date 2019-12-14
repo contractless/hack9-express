@@ -18,13 +18,11 @@ async function truncateTables() {
 
 async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
     const client = await createClient();
-
-
-
+    
     const query = `
         select similarity(prefix, '${prefixArg}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
         from public.calling_codes
-        where start_date <= '${date}' and '${date}' < NOW()
+        where start_date <= '${date}'
         order by sim desc, pl desc, start_date desc
         limit 1`;
 

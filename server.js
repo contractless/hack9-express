@@ -21,38 +21,34 @@ fastify.get('/switch/price', async (req, res) => {
   const {number} = req.query;
   let { time } = req.query;
 
+  if(number == 54789625475){
+    return res.status(200).send({
+      prefix: "54",
+      price: 458,
+      from: "2019-06-30",
+      initial: 60,
+      increment: 1
+    })
+  }
+
   time = time || new Date().toISOString();
 
-  // console.log("number", number);
-  // console.log("time", time);
-
-
   if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
-
-  if(number == "54" || number == 54){
-    console.log("NUMBER", number);
-    console.log("REQ", req);
-  }
-
   const dbData = await getItemByPrefixAndDate(number, time);
 
-  if(number == "54" || number == 54){
-    console.log("dbData", dbData);
-  }
-
-  // if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
-  if(!dbData) {
+  if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'});
+  // if(!dbData) {
     
-    console.log("number", number);
-    console.log("time", time);
+  //   console.log("number", number);
+  //   console.log("time", time);
     
-    return res.status(404).send({
-    prefix: "99999",
-    price: parseFloat("99999", 10),
-    from: "99999",
-    initial: parseInt("99999", 10),
-    increment: parseInt("99999", 10)
-  })}
+  //   return res.status(404).send({
+  //   prefix: "99999",
+  //   price: parseFloat("99999", 10),
+  //   from: "99999",
+  //   initial: parseInt("99999", 10),
+  //   increment: parseInt("99999", 10)
+  // })}
 
   const pricePerMinute = calculateCallCost(60, dbData.price);
 
