@@ -1,0 +1,9 @@
+scenarios:
+  - name: "GET financial/invoice/{{id}}"
+    flow:
+    - get:
+        url: "/financial/invoice/{{id}}"
+        expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data

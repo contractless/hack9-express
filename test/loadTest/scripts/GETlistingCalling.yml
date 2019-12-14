@@ -1,0 +1,12 @@
+scenarios:
+  - name: "GET listing/{{calling}}"
+    flow:
+    - get:
+        url: "/switch/{{calling}}"
+        qs:
+          from
+          to
+        expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data
