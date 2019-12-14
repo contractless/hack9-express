@@ -36,11 +36,11 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
-        if(prefixArg.indexOf(prefix) == -1){
-            return null;
+        if(prefixArg.indexOf(prefix) == 0){
+            return { prefix, price, initial, increment, start_date };
         }
 
-        return { prefix, price, initial, increment, start_date };
+        return null;
     } catch (error) {
         console.log(error);
         client.end();
