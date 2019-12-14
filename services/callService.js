@@ -1,8 +1,10 @@
-<<<<<<< HEAD
-const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, truncateTables, generateInvoiceQuery } = require('../infrastructure/postgres')
-=======
-const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres,  } = require('../infrastructure/postgres')
->>>>>>> a787db1633b65aa0102075d2825cc861cf00048e
+const { getItemByPrefixAndDateFromPostgres, 
+    storeCallRecordToPostgres, 
+    getListingCallingFromPostgres, 
+    truncateTables, 
+    generateInvoiceQuery,
+    getInvoicesFromDb,
+    getInvoiceFromDb } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
@@ -24,7 +26,20 @@ const generateInvoice = async (start, end, callback) => {
     return generateInvoiceQuery(start, end, callback);
 }
 
+const getInvoices = async (start, end) => {
+    return await getInvoicesFromDb(start, end);
+    // return await getInvoiceFromDb();
+}
+
+const getInvoiceById = async(id) => {
+    return await getInvoiceFromDb(id);
+}
+
+
+
 module.exports = {
+    getInvoiceById,
+    getInvoices,
     generateInvoice,
     getItemByPrefixAndDate,
     resetDbEntries,

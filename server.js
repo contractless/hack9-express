@@ -2,10 +2,10 @@ const Joi = require('@hapi/joi');
 const axios = require('axios');
 
 const {calculateCallCost, calculateDuration, isNumberValid} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling, generateInvoice} = require('./services/callService');
+const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling, generateInvoice, getInvoices, getInvoiceById } = require('./services/callService');
 require('dotenv').config();
 
-const fastify = require('fastify')({ logger: false});
+const fastify = require('fastify')({ logger: true});
 
 fastify.get('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
 
@@ -99,14 +99,29 @@ fastify.post('/financial/invoice', async (req, res) => {
   try {
     const promiseArray = generateInvoice(start, end, callback);
     res.status(202).send();
-    await promiseArray[1];
-    return true;
+    await promiseArray[1];    
+    await getInvoices(start, end);
+    // await axios.post(callback, invoices);
+    return true;    
   } catch (error) {
     console.log('ERROR WHILE GENERATING INVOICE', error);
     res.status(500).send();
   }
   
 })
+
+fastify.get('/financial/invoice/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const invoice = await getInvoiceById(id);
+
+  console.log('passed fastify1');
+
+  
+  return res.status(200).send(invoice);
+
+})
+
 
 
 const start = async () => {

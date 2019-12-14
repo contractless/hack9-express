@@ -106,7 +106,7 @@ async function generateInvoiceQuery(start, end, callback) {
     const client = await createClient();
 
     const query = `
-        INSERT INTO public.invoices(sum, count, calling, start_date, end_date) 
+        INSERT INTO invoices(calling, sum, count, start_date, end_date) 
         SELECT calc.*, '${start}' as start_date, '${end}' as end_date
         FROM
         (SELECT calling, SUM(cost) as sum, COUNT(*) as count 
@@ -117,6 +117,47 @@ async function generateInvoiceQuery(start, end, callback) {
 
     const queryPromise = client.query(query);
     return [client, queryPromise];
+}
+
+async function getInvoiceFromDb(invoiceId) {
+    const client = await createClient();
+
+    const query = `
+        SELECT id, calling, start_date, end_date, sum, count
+        FROM invoices
+        WHERE id = '${invoiceId}'
+    `;
+
+    const queryResult = await client.query(query);
+    client.end();
+
+    if (!resultHasData(queryResult)) {
+        return null;
+    }
+
+    const { id, calling, start_date, end_date, sum, count } = queryResult.rows[0];
+    return { id, calling, start_date, end_date, sum, count };
+    
+}
+
+async function getInvoicesFromDb(start, end) {
+    const client = await createClient();
+    const query = `
+        SELECT *
+        FROM invoices
+        WHERE start_date = '${start}' AND end_date = '${end}'
+    `;
+
+    const queryResult = await client.query(query);
+    client.end();
+
+    const invoices = [];
+
+    queryResult.rows.forEach(({ id, calling, start_date, end_date, sum, count }) => {
+        invoices.push({ id, calling, start: start_date, end: end_date, sum, count });
+    });
+
+    return invoices;
 }
 
 async function createClient() {
@@ -130,6 +171,8 @@ async function createClient() {
 }
 
 module.exports = {
+    getInvoiceFromDb,
+    getInvoicesFromDb,
     generateInvoiceQuery,
     getItemByPrefixAndDateFromPostgres,
     getListingCallingFromPostgres,
