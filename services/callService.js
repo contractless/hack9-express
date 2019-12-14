@@ -49,5 +49,6 @@ module.exports = {
     getItemByPrefixAndDate,
     resetDbEntries,
     storeCallRecord,
-    getListingCalling
+    getListingCalling,
+    getReports
 }
