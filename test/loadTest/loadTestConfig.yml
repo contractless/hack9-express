@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:3000"
+  timeout: 5000
+  environments:
+    DEV:
+      target: "http://localhost:3000"
+      phases:
+        - duration: 120
+          arrivalRate: 10
+    PROD:
+      target: "https://localhost:3000"
+      phases:
+        - duration: 1
+          arrivalRate: 10
+  ensure:
+    p95: 15000
+    maxErrorRate: 0

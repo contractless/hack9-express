@@ -1,0 +1,17 @@
+scenarios:
+  - name: "POST financial/invoice"
+    flow:
+    - post:
+        url: "/financial/invoice"
+        json:
+          query: '
+            {
+              "start": "2019-05-01T00:00:00.00Z",
+              "end": "2019-05-31T23:59:59.99Z",
+              "callback": "http://judge-thread.hack9.levi9.com/report/invoice/g1y67aeega12384"
+            }
+          '
+        expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data
