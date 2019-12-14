@@ -22,7 +22,16 @@ fastify.get('/switch/price', async (req, res) => {
 
   if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
 
+  if(number == "38111" || number == 38111){
+    console.log("NUMBER", number);
+    console.log("REQ", req);
+  }
+
   const dbData = await getItemByPrefixAndDate(number, time);
+
+  if(number == "38111" || number == 38111){
+    console.log("dbData", dbData);
+  }
 
   // if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
   if(!dbData) return res.status(200).send({

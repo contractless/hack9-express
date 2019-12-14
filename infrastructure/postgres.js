@@ -19,12 +19,19 @@ async function truncateTables() {
 async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
     const client = await createClient();
 
+
+
     const query = `
         select similarity(prefix, '${prefixArg}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
         from public.calling_codes
         where start_date <= '${date}'
         order by sim desc, pl desc, start_date desc
         limit 1`;
+
+
+        if(prefixArg == "38111" || prefixArg == 38111){
+            console.log("query", query);
+          }
 
     try {
         const queryResult = await client.query(query);
@@ -33,10 +40,18 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         if (!resultHasData(queryResult)) {
             return null;
         }
+
+        if(prefixArg == "38111" || prefixArg == 38111){
+            console.log("queryResult", queryResult);
+          }
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
         if(prefixArg.indexOf(prefix) == 0){
+            if(prefixArg == "38111" || prefixArg == 38111){
+                console.log("tu sam");
+              }
+
             return { prefix, price, initial, increment, start_date };
         }
 
