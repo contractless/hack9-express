@@ -21,15 +21,15 @@ fastify.get('/switch/price', async (req, res) => {
   const {number} = req.query;
   let { time } = req.query;
 
-  if(number == 54789625475){
-    return res.status(200).send({
-      prefix: "54",
-      price: 458,
-      from: "2019-06-30",
-      initial: 60,
-      increment: 1
-    })
-  }
+  // if(number == 54789625475){
+  //   return res.status(200).send({
+  //     prefix: "54",
+  //     price: 458,
+  //     from: "2019-06-30",
+  //     initial: 60,
+  //     increment: 1
+  //   })
+  // }
 
   time = time || new Date().toISOString();
 
