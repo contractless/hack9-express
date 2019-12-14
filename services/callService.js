@@ -1,4 +1,4 @@
-const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres } = require('../infrastructure/postgres')
+const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, truncateTables } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
@@ -13,7 +13,7 @@ const getListingCalling = async(calling, from, to) => {
 }
 
 const resetDbEntries = async () => {
-    return true;
+    return await truncateTables();
 }
 
 module.exports = {
