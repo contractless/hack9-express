@@ -118,5 +118,6 @@ async function createClient() {
 module.exports = {
     getItemByPrefixAndDateFromPostgres,
     getListingCallingFromPostgres,
-    storeCallRecordToPostgres
+    storeCallRecordToPostgres,
+    truncateTables,
 }

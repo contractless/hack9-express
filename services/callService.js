@@ -13,7 +13,7 @@ const getListingCalling = async(calling, from, to) => {
 }
 
 const resetDbEntries = async () => {
-    return await truncateTables();
+  return await truncateTables()
 }
 
 module.exports = {
