@@ -24,7 +24,14 @@ fastify.get('/switch/price', async (req, res) => {
 
   const dbData = await getItemByPrefixAndDate(number, time);
 
-  if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
+  // if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
+  if(!dbData) return res.status(200).send({
+    prefix: "99999",
+    price: parseFloat("99999", 10),
+    from: "99999",
+    initial: parseInt("99999", 10),
+    increment: parseInt("99999", 10)
+  })
 
   const pricePerMinute = calculateCallCost(60, dbData.price);
 
