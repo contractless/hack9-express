@@ -102,7 +102,7 @@ fastify.post('/financial/invoice', async (req, res) => {
     const promiseArray = generateInvoice(start, end, callback);
     res.status(202).send();
     await promiseArray[1];    
-    await getInvoices(start, end);
+    const invoices = await getInvoices(start, end);
     await axios.post(callback, invoices);
     return true;    
   } catch (error) {
