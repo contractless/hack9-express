@@ -21,7 +21,10 @@ fastify.get('/switch/price', async (req, res) => {
   const {number} = req.query;
   let { time } = req.query;
 
-  time = time > Date.now() ||  !time ? new Date().toISOString() : time
+  time = time || new Date().toISOString();
+
+  // console.log("number", number);
+  // console.log("time", time);
 
 
   if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
@@ -38,13 +41,18 @@ fastify.get('/switch/price', async (req, res) => {
   }
 
   // if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
-  if(!dbData) return res.status(404).send({
+  if(!dbData) {
+    
+    console.log("number", number);
+    console.log("time", time);
+    
+    return res.status(404).send({
     prefix: "99999",
     price: parseFloat("99999", 10),
     from: "99999",
     initial: parseInt("99999", 10),
     increment: parseInt("99999", 10)
-  })
+  })}
 
   const pricePerMinute = calculateCallCost(60, dbData.price);
 
