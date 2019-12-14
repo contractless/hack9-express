@@ -3,7 +3,7 @@ const {calculateCallCost, calculateDuration, isNumberValid} = require('./functio
 const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling} = require('./services/callService');
 require('dotenv').config();
 
-const fastify = require('fastify')({ logger: false});
+const fastify = require('fastify')({ logger: true });
 
 fastify.get('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
 
