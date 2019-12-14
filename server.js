@@ -20,13 +20,15 @@ fastify.post('/reset', async (req, res) => {
 
 // Get (potential) call price for the given called number, per minute. This will not initiate a call.
 fastify.get('/switch/price', async (req, res) => {
-  const {number, time} = req.query;
+  const {number} = req.query;
+  let { time } = req.query;
+
+  time = time || new Date().toISOString();
 
   if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
-
   const dbData = await getItemByPrefixAndDate(number, time);
 
-  if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
+  if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'});
 
   const pricePerMinute = calculateCallCost(60, dbData.price);
 
@@ -55,7 +57,7 @@ fastify.post('/switch/call', async (req, res) => {
   try{
     const dbData = await getItemByPrefixAndDate(called, start);
     if(!dbData) return res.code(404).send({message: 'Prefix not found!'})
-    const roundedDuration = calculateDuration(dbData.initial, duration, dbData.increment)
+    const roundedDuration = calculateDuration(+dbData.initial, +duration, +dbData.increment)
     const callCost = calculateCallCost(roundedDuration, dbData.price)
     await storeCallRecord(calling, called, start, duration, roundedDuration, dbData.price, callCost);
     return {
@@ -65,7 +67,7 @@ fastify.post('/switch/call', async (req, res) => {
       duration: parseInt(duration, 10),
       rounded: +roundedDuration,
       price: +dbData.price,
-      cost: +callCost
+      cost: +callCost.toFixed(2)
     }
   } catch(e) {
     console.log(e)

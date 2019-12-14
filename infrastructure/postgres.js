@@ -22,8 +22,8 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
     const query = `
         select similarity(prefix, '${prefixArg}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
         from public.calling_codes
-        where start_date <= '${date}'
-        order by sim desc, pl desc
+        where start_date <= '${date}' and '${prefixArg}' like concat(prefix, '%')
+        order by sim desc, pl desc, start_date desc
         limit 1`;
 
     try {
@@ -33,14 +33,16 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         if (!resultHasData(queryResult)) {
             return null;
         }
+
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
-        if(prefixArg.indexOf(prefix) == -1){
-            return null;
+        if(prefixArg.indexOf(prefix) == 0){
+
+            return { prefix, price, initial, increment, start_date };
         }
 
-        return { prefix, price, initial, increment, start_date };
+        return null;
     } catch (error) {
         console.log(error);
         client.end();
@@ -88,7 +90,8 @@ const getListingCallingFromPostgres = async (calling, from, to) => {
         const calls = [];
 
         queryResult.rows.forEach(({ calling, called, start, duration, rounded, price, cost }) => {
-            calls.push({ calling, called, start, duration, rounded, price, cost });
+            const start1 = start.toISOString().slice(0, -5)+"Z";
+            calls.push({ calling, called, start:start1, duration, rounded, price, cost });
         });
 
         return {
@@ -176,5 +179,6 @@ module.exports = {
     generateInvoiceQuery,
     getItemByPrefixAndDateFromPostgres,
     getListingCallingFromPostgres,
-    storeCallRecordToPostgres
+    storeCallRecordToPostgres,
+    truncateTables,
 }
