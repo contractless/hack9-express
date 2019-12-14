@@ -3,7 +3,7 @@ const path = require('path');
 const scripts = fs.readdirSync(path.resolve(__dirname, './scripts'));
 const scriptArg = [process.argv && process.argv[2].split("=")[1]];
 
-const runArtilleryTest = require('../artillery/runArtilleryTest.js');
+const runArtilleryTest = require('./runArtilleryTest.js');
 
 runArtilleryTest.runTest(
   scriptArg || scripts,
