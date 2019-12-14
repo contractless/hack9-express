@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const fastify = require('fastify')({ logger: false});
 
-fastify.post('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
+fastify.get('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
 
 fastify.post('/reset', async (req, res) => {
   try{
