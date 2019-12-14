@@ -3,7 +3,7 @@ const {calculateCallCost, calculateDuration, isNumberValid} = require('./functio
 const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling} = require('./services/callService');
 require('dotenv').config();
 
-const fastify = require('fastify')({ logger: true});
+const fastify = require('fastify')({ logger: false});
 
 fastify.get('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
 
@@ -26,14 +26,14 @@ fastify.get('/switch/price', async (req, res) => {
 
   if(!isNumberValid(number)) return res.status(400).send({message: 'Call number is not in valid format!'})
 
-  if(number == "38111" || number == 38111){
+  if(number == "54" || number == 54){
     console.log("NUMBER", number);
     console.log("REQ", req);
   }
 
   const dbData = await getItemByPrefixAndDate(number, time);
 
-  if(number == "38111" || number == 38111){
+  if(number == "54" || number == 54){
     console.log("dbData", dbData);
   }
 

@@ -29,7 +29,7 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         limit 1`;
 
 
-        if(prefixArg == "38111" || prefixArg == 38111){
+        if(prefixArg == "54" || prefixArg == 54){
             console.log("query", query);
           }
 
@@ -41,14 +41,14 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
             return null;
         }
 
-        if(prefixArg == "38111" || prefixArg == 38111){
+        if(prefixArg == "54" || prefixArg == 54){
             console.log("queryResult", queryResult);
           }
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
         if(prefixArg.indexOf(prefix) == 0){
-            if(prefixArg == "38111" || prefixArg == 38111){
+            if(prefixArg == "54" || prefixArg == 54){
                 console.log("tu sam");
               }
 
