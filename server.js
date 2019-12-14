@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 const axios = require('axios');
 
 const {calculateCallCost, calculateDuration, isNumberValid} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling, generateInvoice, getInvoices, getInvoiceById } = require('./services/callService');
+const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling, generateInvoice, getInvoices, getInvoiceById, getReports } = require('./services/callService');
 require('dotenv').config();
 
 const fastify = require('fastify')({ logger: true});
@@ -119,7 +119,28 @@ fastify.get('/financial/invoice/:id', async (req, res) => {
   
   return res.status(200).send(invoice);
 
-})
+});
+
+fastify.get('/financial/reports/:calling', async (req, res) => {
+  const { calling } = req.params;
+
+  const reports = getReports(calling);
+
+  const remaining = +reports[0].getReports - reports.map(report => report.sum).reduce((acc, cur) => +acc + cur);
+
+  const invoices = reports.map(report => {
+    return {
+    id: report.id,
+    sum: report.sum
+  }});
+  
+  return res.status(200).send({
+    calling,
+    invoices,
+    remaining
+  });
+
+});
 
 
 

@@ -163,6 +163,33 @@ async function getInvoicesFromDb(start, end) {
     return { invoices };
 }
 
+async function getReportsFromPostgress(calling){
+    const client = await createClient();
+    const query = `
+        SELECT i.calling as calling, i.id as id, i.sum as sum, c.full_costs as full_costs
+        FROM invoices i
+        INNER JOIN (SELECT SUM(ix.cost) as full_costs
+                    FROM call_history ix
+                    WHERE ix.calling = ${calling}) c ON 1=1
+        WHERE i.calling = ${calling}
+    `;
+
+    const queryResult = await client.query(query);
+    client.end();
+
+    if (!resultHasData(queryResult)) {
+        return null;
+    }
+
+    const reports = [];
+
+    queryResult.rows.forEach(({ calling, id, sum, full_costs }) => {
+        reports.push({ calling, id, sum, full_costs });
+    });
+
+    return reports;
+}
+
 async function createClient() {
     const client = new Client({
         connectionString: connectionString

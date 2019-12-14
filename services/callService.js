@@ -4,7 +4,8 @@ const { getItemByPrefixAndDateFromPostgres,
     truncateTables, 
     generateInvoiceQuery,
     getInvoicesFromDb,
-    getInvoiceFromDb } = require('../infrastructure/postgres')
+    getInvoiceFromDb,
+    getReportsFromPostgress } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
@@ -29,6 +30,10 @@ const generateInvoice = async (start, end, callback) => {
 const getInvoices = async (start, end) => {
     return await getInvoicesFromDb(start, end);
     // return await getInvoiceFromDb();
+}
+
+const getReports = async (calling) => {
+    return await getReportsFromPostgress(calling)
 }
 
 const getInvoiceById = async(id) => {
