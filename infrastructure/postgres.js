@@ -26,11 +26,6 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         order by sim desc, pl desc, start_date desc
         limit 1`;
 
-
-        if(prefixArg == "54" || prefixArg == 54){
-            console.log("query", query);
-          }
-
     try {
         const queryResult = await client.query(query);
         client.end();
@@ -39,16 +34,10 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
             return null;
         }
 
-        if(prefixArg == "54" || prefixArg == 54){
-            console.log("queryResult", queryResult);
-          }
         
         const { prefix, price, initial, increment, start_date } = queryResult.rows[0];
 
         if(prefixArg.indexOf(prefix) == 0){
-            if(prefixArg == "54" || prefixArg == 54){
-                console.log("tu sam");
-              }
 
             return { prefix, price, initial, increment, start_date };
         }
