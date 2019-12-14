@@ -28,7 +28,7 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
             return null;
         }
 
-        return new CallingCode(prefix, price, initial, increment, start_date);
+        return { prefix, price, initial, increment, start_date };
     } catch (error) {
         console.log(error);
         client.end();
@@ -57,6 +57,39 @@ async function storeCallRecordToPostgres(calling, called, start, duration, round
 
 const resultHasData = queryResult => !!queryResult.rowCount;
 
+const getListingCallingFromPostgres = async (calling, from, to) => {
+    const client = await createClient();
+
+    const query = `
+        select calling, called, start, duration, rounded, price, cost
+        from public.call_history
+        where calling = ${calling} and start between '${from}' and '${to}'`;
+
+    try {
+        const queryResult = await client.query(query);
+        client.end();
+
+        if (!resultHasData(queryResult)) {
+            return null;
+        }
+
+        const calls = [];
+
+        queryResult.rows.forEach(({ calling, called, start, duration, rounded, price, cost }) => {
+            calls.push({ calling, called, start, duration, rounded, price, cost });
+        });
+
+        return {
+            calling,
+            calls
+        };
+    } catch (error) {
+        console.log(error);
+        client.end();
+        return null;
+    }
+}
+
 async function createClient() {
     const client = new Client({
         connectionString: connectionString
@@ -67,15 +100,8 @@ async function createClient() {
     return client;
 }
 
-function CallingCode(prefix, price, initial, increment, start_date){
-    this.prefix = prefix;
-    this.price = price;
-    this.initial = initial;
-    this.increment = increment;
-    this.start_date = start_date;
-}
-
 module.exports = {
     getItemByPrefixAndDateFromPostgres,
+    getListingCallingFromPostgres,
     storeCallRecordToPostgres
 }
