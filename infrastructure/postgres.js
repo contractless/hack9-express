@@ -4,6 +4,18 @@ require('dotenv').config();
 
 const connectionString = process.env.CONN_STR;
 
+async function truncateTables() {
+    const client = await createClient();
+    const query = `TRUNCATE public.invoices, public.call_history;`
+    try {
+        await client.query(query);
+        return true;
+    } catch (e) {
+        console.log(e)
+        return null;
+    }
+} 
+
 async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
     const client = await createClient();
 

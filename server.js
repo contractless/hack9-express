@@ -7,6 +7,8 @@ require('dotenv').config();
 
 const fastify = require('fastify')({ logger: false});
 
+fastify.get('/', async (_, res) => res.status(200).send({ message: 'Hello world!' }))
+
 fastify.post('/reset', async (req, res) => {
   try{
     await resetDbEntries();
@@ -60,10 +62,10 @@ fastify.post('/switch/call', async (req, res) => {
       calling,
       called,
       start,
-      duration,
-      rounded: roundedDuration,
-      price: dbData.price,
-      cost: callCost
+      duration: parseInt(duration, 10),
+      rounded: +roundedDuration,
+      price: +dbData.price,
+      cost: +callCost
     }
   } catch(e) {
     console.log(e)
@@ -109,7 +111,7 @@ fastify.post('/financial/invoice', async (req, res) => {
 
 const start = async () => {
   try {
-    await fastify.listen(process.env.PORT)
+    await fastify.listen(process.env.PORT, '0.0.0.0')
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

@@ -174,11 +174,12 @@ describe('Verify endpoints', () => {
   //TODO validate response output
   describe('/switch/call', () => {
 
-    const calling = "381211234567";
-    const called = "38164111222333";
-    const start = "2019-05-23T21:03:33.30Z";
-    const duration = "450";
-    const invalidDuration = 'duration string';
+    c02:05
+    const calling = "9328654";
+        const called = "9328654";
+        const start = "2019-07-01T00:00:00.000Z";
+        const duration = "450";
+        const invalidDuration = 'duration string';
 
     it('Returns call cost', async () => {
       const res = await fastify.inject({

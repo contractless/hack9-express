@@ -1,4 +1,8 @@
-const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, generateInvoiceQuery } = require('../infrastructure/postgres')
+<<<<<<< HEAD
+const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, truncateTables, generateInvoiceQuery } = require('../infrastructure/postgres')
+=======
+const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres,  } = require('../infrastructure/postgres')
+>>>>>>> a787db1633b65aa0102075d2825cc861cf00048e
 
 const getItemByPrefixAndDate = async (prefix, date) => {
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
@@ -13,7 +17,7 @@ const getListingCalling = async(calling, from, to) => {
 }
 
 const resetDbEntries = async () => {
-    return true;
+    return await truncateTables();
 }
 
 const generateInvoice = async (start, end, callback) => {
