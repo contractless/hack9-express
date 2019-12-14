@@ -139,7 +139,7 @@ async function getInvoiceFromDb(invoiceId) {
     }
 
     const { id, calling, start_date, end_date, sum, count } = queryResult.rows[0];
-    return { id, calling, start_date, end_date, sum, count };
+    return { id, calling, start: start_date, end: end_date, sum, count };
     
 }
 
