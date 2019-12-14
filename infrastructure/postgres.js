@@ -90,6 +90,23 @@ const getListingCallingFromPostgres = async (calling, from, to) => {
     }
 }
 
+async function generateInvoiceQuery(start, end, callback) {
+    const client = await createClient();
+
+    const query = `
+        INSERT INTO public.invoices(sum, count, calling, start_date, end_date) 
+        SELECT calc.*, '${start}' as start_date, '${end}' as end_date
+        FROM
+        (SELECT calling, SUM(cost) as sum, COUNT(*) as count 
+        FROM call_history
+        WHERE start BETWEEN '${start}' AND '${end}'
+        GROUP BY calling) calc
+    `;
+
+    const queryPromise = client.query(query);
+    return [client, queryPromise];
+}
+
 async function createClient() {
     const client = new Client({
         connectionString: connectionString
@@ -101,6 +118,7 @@ async function createClient() {
 }
 
 module.exports = {
+    generateInvoiceQuery,
     getItemByPrefixAndDateFromPostgres,
     getListingCallingFromPostgres,
     storeCallRecordToPostgres

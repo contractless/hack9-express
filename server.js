@@ -1,6 +1,8 @@
 const Joi = require('@hapi/joi');
+const axios = require('axios');
+
 const {calculateCallCost, calculateDuration, isNumberValid} = require('./functions/callCostCalculator');
-const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling} = require('./services/callService');
+const {getItemByPrefixAndDate, resetDbEntries, storeCallRecord, getListingCalling, generateInvoice} = require('./services/callService');
 require('dotenv').config();
 
 const fastify = require('fastify')({ logger: false});
@@ -78,6 +80,32 @@ fastify.get('/listing/:calling', async (req, res) => {
   
   return res.status(200).send(callHistory);
 });
+
+fastify.post('/financial/invoice', async (req, res) => {
+  const schema = Joi.object().keys({
+    start: Joi.date().required(),
+    end: Joi.date().required(),
+    callback: Joi.string().required()
+  })
+
+  const {error} = await schema.validate(req.body);
+
+  if (error) return res.status(400).send({ message: error.message });
+
+  const { start, end, callback } = req.body;
+
+  try {
+    const promiseArray = generateInvoice(start, end, callback);
+    res.status(202).send();
+    await promiseArray[1];
+    return true;
+  } catch (error) {
+    console.log('ERROR WHILE GENERATING INVOICE', error);
+    res.status(500).send();
+  }
+  
+})
+
 
 const start = async () => {
   try {

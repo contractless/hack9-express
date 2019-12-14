@@ -1,4 +1,4 @@
-const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres } = require('../infrastructure/postgres')
+const { getItemByPrefixAndDateFromPostgres, storeCallRecordToPostgres, getListingCallingFromPostgres, generateInvoiceQuery } = require('../infrastructure/postgres')
 
 const getItemByPrefixAndDate = async (prefix, date) => {
     return await getItemByPrefixAndDateFromPostgres(prefix, date);
@@ -16,7 +16,12 @@ const resetDbEntries = async () => {
     return true;
 }
 
+const generateInvoice = async (start, end, callback) => {
+    return generateInvoiceQuery(start, end, callback);
+}
+
 module.exports = {
+    generateInvoice,
     getItemByPrefixAndDate,
     resetDbEntries,
     storeCallRecord,
