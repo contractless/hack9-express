@@ -113,6 +113,14 @@ fastify.post('/financial/invoice', async (req, res) => {
 })
 
 fastify.get('/financial/invoice/:id', async (req, res) => {
+  const schema = Joi.object().keys({
+    id: Joi.number().required()
+  })
+
+  const { error } = await schema.validate(req.params);
+
+  if(error) return res.status(400).send({message: error.message})
+
   const { id } = req.params;
 
   const invoice = await getInvoiceById(id);
