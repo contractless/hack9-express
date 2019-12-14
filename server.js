@@ -26,8 +26,7 @@ fastify.get('/switch/price', async (req, res) => {
 
   if(!dbData) return res.status(404).send({message: 'Price for the number cannot be calculated!'})
 
-  const roundedDuration = calculateDuration(dbData.initial, 60, dbData.increment)
-  const pricePerMinute = calculateCallCost(roundedDuration, dbData.price);
+  const pricePerMinute = calculateCallCost(60, dbData.price);
 
   return res.status(200).send({
       prefix: dbData.prefix,

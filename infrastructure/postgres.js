@@ -23,7 +23,7 @@ async function getItemByPrefixAndDateFromPostgres(prefixArg, date) {
         select similarity(prefix, '${prefixArg}') as sim, length(prefix) as pl, prefix, price, increment, initial, start_date
         from public.calling_codes
         where start_date <= '${date}'
-        order by sim desc, pl desc
+        order by sim desc, pl desc, start_date desc
         limit 1`;
 
     try {
