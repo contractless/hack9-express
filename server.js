@@ -58,10 +58,10 @@ fastify.post('/switch/call', async (req, res) => {
       calling,
       called,
       start,
-      duration,
-      rounded: roundedDuration,
-      price: dbData.price,
-      cost: callCost
+      duration: parseInt(duration, 10),
+      rounded: +roundedDuration,
+      price: +dbData.price,
+      cost: +callCost
     }
   } catch(e) {
     console.log(e)
